@@ -12,8 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tbl_data_produktivitas', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('kambing_id')->constrained('tbl_kambing')->cascadeOnDelete();
+            $table->increments('id');
+            $table->unsignedInteger('kambing_id');
+            $table->foreign('kambing_id')->references('id')->on('tbl_kambing')->cascadeOnDelete();
             $table->date('tanggal_pencatatan');
             $table->decimal('bobot_badan', 5, 2);
             $table->integer('tingkat_kelahiran')->default(0);

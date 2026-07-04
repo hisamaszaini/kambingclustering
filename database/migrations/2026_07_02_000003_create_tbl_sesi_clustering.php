@@ -12,8 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tbl_sesi_clustering', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained('tbl_users')->cascadeOnDelete();
+            $table->increments('id');
+            $table->unsignedInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('tbl_users')->cascadeOnDelete();
             $table->integer('jumlah_cluster')->default(3);
             $table->integer('total_iterasi');
             $table->json('centroid_awal');

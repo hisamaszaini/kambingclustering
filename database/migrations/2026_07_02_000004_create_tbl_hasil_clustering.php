@@ -12,9 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tbl_hasil_clustering', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('sesi_id')->constrained('tbl_sesi_clustering')->cascadeOnDelete();
-            $table->foreignId('kambing_id')->constrained('tbl_kambing')->cascadeOnDelete();
+            $table->increments('id');
+            $table->unsignedInteger('sesi_id');
+            $table->foreign('sesi_id')->references('id')->on('tbl_sesi_clustering')->cascadeOnDelete();
+            $table->unsignedInteger('kambing_id');
+            $table->foreign('kambing_id')->references('id')->on('tbl_kambing')->cascadeOnDelete();
             $table->string('cluster'); // Rendah, Sedang, Tinggi
             $table->decimal('bobot_badan_val', 5, 2);
             $table->integer('tingkat_kelahiran_val');
