@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('tbl_users', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
-            $table->string('username')->unique();
+            $table->string('name', 60);
+            $table->string('username', 50)->unique();
             $table->string('email')->nullable()->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

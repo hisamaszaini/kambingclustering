@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('tbl_kambing', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('kode_kambing')->unique();
+            $table->string('kode_kambing', 50)->unique();
             $table->enum('jenis_kelamin', ['Jantan', 'Betina']);
             $table->timestamps();
         });
