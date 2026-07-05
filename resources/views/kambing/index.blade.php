@@ -180,7 +180,6 @@
                     @empty
                     <tr>
                         <td colspan="4" class="px-6 py-12 text-center text-slate-400">
-                            <div class="text-3xl text-slate-300 mb-2"><i class="fa-solid fa-paw"></i></div>
                             <div class="text-xs font-semibold">Data kambing tidak ditemukan</div>
                             <div class="text-xxs font-medium text-slate-400">Silakan masukkan data atau impor dari file Excel.</div>
                         </td>
