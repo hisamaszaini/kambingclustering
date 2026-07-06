@@ -20,18 +20,6 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Administrator',
                 'email' => 'admin@kambingmonitoring.com',
                 'password' => Hash::make('admin123'),
-                'role' => 'admin',
-            ]
-        );
-
-        // User account
-        User::updateOrCreate(
-            ['username' => 'user'],
-            [
-                'name' => 'Petugas',
-                'email' => 'user@kambingmonitoring.com',
-                'password' => Hash::make('user123'),
-                'role' => 'user',
             ]
         );
     }

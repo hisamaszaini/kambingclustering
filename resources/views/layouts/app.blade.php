@@ -66,7 +66,7 @@
                 </div>
                 <div class="text-left">
                     <span class="block text-xs font-bold text-slate-800 group-hover:text-slate-900 transition leading-none">{{ Auth::user()->name }}</span>
-                    <span class="block text-[9px] font-semibold text-slate-400 capitalize mt-0.5">{{ Auth::user()->role }}</span>
+
                 </div>
                 <span class="text-xxs text-slate-400 group-hover:text-slate-650 transition"><i class="fa-solid fa-chevron-down text-[9px]"></i></span>
             </button>
@@ -83,7 +83,7 @@
                 class="absolute right-0 mt-2 w-56 bg-white rounded-xl border border-slate-200 shadow-lg py-1.5 z-50">
                 <div class="px-4 py-2 border-b border-slate-100">
                     <span class="block text-xs font-bold text-slate-800 truncate">{{ Auth::user()->name }}</span>
-                    <span class="block text-[10px] text-slate-400 font-medium truncate capitalize">Role: {{ Auth::user()->role }}</span>
+
                 </div>
 
                 <a href="{{ route('profile.edit') }}" class="flex items-center space-x-2.5 px-4 py-2.5 text-xs text-slate-650 hover:bg-slate-50 transition">
@@ -129,8 +129,6 @@
                     <span>Data Produktivitas</span>
                 </a>
 
-                <!-- Admin-only Clustering & User Management -->
-                @if(Auth::user()->role === 'admin')
                 <div class="pt-4 pb-1 px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">K-Means Analisis</div>
 
                 <!-- Proses K-Means -->
@@ -146,25 +144,6 @@
                     <span class="text-sm w-5 text-center"><i class="fa-solid fa-diagram-project"></i></span>
                     <span>Hasil Clustering</span>
                 </a>
-
-                <div class="pt-4 pb-1 px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Pengaturan Sistem</div>
-
-                <!-- Kelola Pengguna -->
-                <a href="{{ route('user.index') }}"
-                    class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition {{ Request::is('user*') ? 'bg-primary text-white font-bold' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
-                    <span class="text-sm w-5 text-center"><i class="fa-solid fa-users-gear"></i></span>
-                    <span>Kelola Pengguna</span>
-                </a>
-                @else
-                <!-- Read-only clustering for User role -->
-                <div class="pt-4 pb-1 px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">K-Means Analisis</div>
-
-                <a href="{{ route('clustering.hasil') }}"
-                    class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition {{ Request::is('clustering/hasil*') ? 'bg-primary text-white font-bold' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
-                    <span class="text-sm w-5 text-center"><i class="fa-solid fa-diagram-project"></i></span>
-                    <span>Hasil Clustering</span>
-                </a>
-                @endif
 
                 <!-- Pengaturan Akun -->
                 <a href="{{ route('profile.edit') }}"

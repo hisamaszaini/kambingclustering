@@ -31,12 +31,10 @@
                 <i class="fa-solid fa-file-invoice"></i>
                 <span>Kelola Kambing</span>
             </a>
-            @if(Auth::user()->role === 'admin')
             <a href="{{ route('clustering.proses-form') }}" class="px-4 py-2.5 bg-orange-500 text-white hover:bg-orange-400 rounded-xl font-bold text-xs border border-orange-400/20 transition shadow-sm flex items-center space-x-1.5">
                 <i class="fa-solid fa-bolt"></i>
                 <span>Jalankan K-Means</span>
             </a>
-            @endif
         </div>
     </div>
 

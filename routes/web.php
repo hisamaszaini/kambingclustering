@@ -48,14 +48,7 @@ Route::middleware('auth')->group(function () {
     Route::get('clustering/export-excel', [ClusteringController::class, 'exportExcel'])->name('clustering.export-excel');
     Route::get('clustering/export-pdf', [ClusteringController::class, 'exportPdf'])->name('clustering.export-pdf');
 
-    // Admin-Only Routes
-    Route::middleware('role:admin')->group(function () {
-        
-        // K-Means Processing & Final Dashboard
-        Route::get('clustering/proses', [ClusteringController::class, 'prosesForm'])->name('clustering.proses-form');
-        Route::post('clustering/proses', [ClusteringController::class, 'proses'])->name('clustering.proses');
-
-        // User Account Management
-        Route::resource('user', UserController::class)->except(['show', 'create', 'edit']);
-    });
+    // K-Means Processing & Final Dashboard
+    Route::get('clustering/proses', [ClusteringController::class, 'prosesForm'])->name('clustering.proses-form');
+    Route::post('clustering/proses', [ClusteringController::class, 'proses'])->name('clustering.proses');
 });
