@@ -80,19 +80,19 @@ class ProduktivitasController extends Controller
         $request->validate([
             'kambing_id' => 'required|exists:tbl_kambing,id',
             'tanggal_pencatatan' => 'required|date',
-            'bobot_badan' => 'required|numeric|min:0|max:999.99',
-            'tingkat_kelahiran' => 'required|integer|min:0|max:100',
-            'produksi_susu' => 'required|numeric|min:0|max:999.99',
+            'bobot_badan' => 'required_without_all:tingkat_kelahiran,produksi_susu|nullable|numeric|min:0|max:999.99',
+            'tingkat_kelahiran' => 'required_without_all:bobot_badan,produksi_susu|nullable|integer|min:0|max:100',
+            'produksi_susu' => 'required_without_all:bobot_badan,tingkat_kelahiran|nullable|numeric|min:0|max:999.99',
         ]);
 
-        // Validasi tambahan: kambing jantan tidak boleh punya produksi susu atau tingkat kelahiran > 0
+        // Validasi tambahan: kambing jantan tidak boleh punya produksi susu atau tingkat kelahiran
         $kambing = Kambing::findOrFail($request->kambing_id);
         $tingkatKelahiran = $request->tingkat_kelahiran;
         $produksiSusu = $request->produksi_susu;
 
         if ($kambing->jenis_kelamin === 'Jantan') {
-            $tingkatKelahiran = 0;
-            $produksiSusu = 0.00;
+            $tingkatKelahiran = null;
+            $produksiSusu = null;
         }
 
         DataProduktivitas::create([
@@ -102,6 +102,10 @@ class ProduktivitasController extends Controller
             'tingkat_kelahiran' => $tingkatKelahiran,
             'produksi_susu' => $produksiSusu,
         ]);
+
+        if ($request->filled('redirect_to')) {
+            return redirect($request->redirect_to)->with('success', 'Data produktivitas berhasil ditambahkan!');
+        }
 
         return redirect()->route('produktivitas.index')->with('success', 'Data produktivitas berhasil ditambahkan!');
     }
@@ -114,9 +118,9 @@ class ProduktivitasController extends Controller
         $request->validate([
             'kambing_id' => 'required|exists:tbl_kambing,id',
             'tanggal_pencatatan' => 'required|date',
-            'bobot_badan' => 'required|numeric|min:0|max:999.99',
-            'tingkat_kelahiran' => 'required|integer|min:0|max:100',
-            'produksi_susu' => 'required|numeric|min:0|max:999.99',
+            'bobot_badan' => 'required_without_all:tingkat_kelahiran,produksi_susu|nullable|numeric|min:0|max:999.99',
+            'tingkat_kelahiran' => 'required_without_all:bobot_badan,produksi_susu|nullable|integer|min:0|max:100',
+            'produksi_susu' => 'required_without_all:bobot_badan,tingkat_kelahiran|nullable|numeric|min:0|max:999.99',
         ]);
 
         $record = DataProduktivitas::findOrFail($id);
@@ -126,8 +130,8 @@ class ProduktivitasController extends Controller
         $produksiSusu = $request->produksi_susu;
 
         if ($kambing->jenis_kelamin === 'Jantan') {
-            $tingkatKelahiran = 0;
-            $produksiSusu = 0.00;
+            $tingkatKelahiran = null;
+            $produksiSusu = null;
         }
 
         $record->update([
@@ -138,16 +142,25 @@ class ProduktivitasController extends Controller
             'produksi_susu' => $produksiSusu,
         ]);
 
+        if ($request->filled('redirect_to')) {
+            return redirect($request->redirect_to)->with('success', 'Data produktivitas berhasil diupdate!');
+        }
+
         return redirect()->route('produktivitas.index')->with('success', 'Data produktivitas berhasil diupdate!');
     }
 
     /**
-     * Hapus satu data produktivitas.
+     * Hapus data produktivitas.
      */
     public function destroy($id)
     {
         $record = DataProduktivitas::findOrFail($id);
         $record->delete();
+
+        if (request()->filled('redirect_to')) {
+            return redirect(request('redirect_to'))->with('success', 'Data produktivitas berhasil dihapus!');
+        }
+
         return redirect()->route('produktivitas.index')->with('success', 'Data produktivitas berhasil dihapus!');
     }
 

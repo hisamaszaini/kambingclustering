@@ -169,6 +169,73 @@
         </div>
     </div>
 
+    <!-- Real-time Recording Alerts / Notifications -->
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-4">
+        <div class="border-b border-slate-100 pb-4 mb-2 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+            <div>
+                <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+                    <span class="relative flex h-2.5 w-2.5">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500"></span>
+                    </span>
+                    Notifikasi & Peringatan Jadwal Perekaman (Real-time)
+                </h3>
+                <p class="text-xxs text-slate-400 mt-0.5">Pemantauan otomatis untuk jadwal penimbangan bobot bulanan, produksi susu harian, dan siklus beranak 5 bulanan.</p>
+            </div>
+            <span class="px-2.5 py-1 rounded-lg text-[10px] font-bold {{ count($kambingsWithAlerts) > 0 ? 'bg-rose-50 text-rose-600' : 'bg-emerald-50 text-emerald-600' }}">
+                {{ count($kambingsWithAlerts) }} Kambing Butuh Perhatian
+            </span>
+        </div>
+
+        @if(count($kambingsWithAlerts) === 0)
+        <div class="py-6 text-center space-y-2">
+            <div class="text-3xl text-emerald-500"><i class="fa-solid fa-circle-check"></i></div>
+            <h4 class="text-xs font-bold text-slate-700">Semua Jadwal Pencatatan Aman</h4>
+            <p class="text-xxs text-slate-400 max-w-md mx-auto">Seluruh kambing memiliki log produktivitas yang lengkap dan mutakhir sesuai ketentuan siklus periodik.</p>
+        </div>
+        @else
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 max-h-[400px] overflow-y-auto pr-1">
+            @foreach($kambingsWithAlerts as $item)
+                @php
+                    $k = $item['kambing'];
+                    $alerts = $item['alerts'];
+                @endphp
+                <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-slate-50 transition flex flex-col justify-between space-y-3">
+                    <div class="flex justify-between items-start">
+                        <div class="space-y-1">
+                            <span class="block text-xs font-bold text-slate-800 hover:text-primary transition">
+                                <a href="{{ route('kambing.show', $k->id) }}">{{ $k->kode_kambing }}</a>
+                            </span>
+                            <span class="px-2 py-0.5 rounded-lg text-[9px] font-semibold {{ $k->jenis_kelamin == 'Jantan' ? 'bg-sky-50 text-sky-600' : 'bg-pink-50 text-pink-600' }}">
+                                <i class="fa-solid {{ $k->jenis_kelamin == 'Jantan' ? 'fa-mars' : 'fa-venus' }} mr-1"></i>{{ $k->jenis_kelamin }}
+                            </span>
+                        </div>
+                        <a href="{{ route('kambing.show', $k->id) }}" class="text-[10px] font-bold text-primary hover:text-primary-hover flex items-center gap-0.5">
+                            <span>Detail</span>
+                            <i class="fa-solid fa-chevron-right text-[8px]"></i>
+                        </a>
+                    </div>
+                    
+                    <div class="space-y-2 border-t border-slate-100 pt-2.5">
+                        @foreach($alerts as $alert)
+                            <div class="flex items-start space-x-2 text-[10px] leading-tight">
+                                @if($alert['status'] === 'critical')
+                                    <span class="text-rose-600 shrink-0 mt-0.5"><i class="fa-solid fa-triangle-exclamation"></i></span>
+                                @elseif($alert['status'] === 'warning')
+                                    <span class="text-amber-500 shrink-0 mt-0.5"><i class="fa-solid fa-circle-exclamation"></i></span>
+                                @else
+                                    <span class="text-sky-500 shrink-0 mt-0.5"><i class="fa-solid fa-circle-info"></i></span>
+                                @endif
+                                <span class="text-slate-600 font-medium">{{ $alert['pesan'] }}</span>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endforeach
+        </div>
+        @endif
+    </div>
+
     <!-- K-Means Explanation Card -->
     <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-4">
         <h3 class="text-sm font-bold text-slate-800 border-b border-slate-100 pb-3">Konsep Pemetaan Kluster K-Means</h3>

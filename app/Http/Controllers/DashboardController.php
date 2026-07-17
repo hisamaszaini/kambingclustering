@@ -58,6 +58,20 @@ class DashboardController extends Controller
         $chartBobot = $monthlyData->pluck('avg_bobot')->map(fn($val) => round($val, 2))->toArray();
         $chartSusu = $monthlyData->pluck('avg_susu')->map(fn($val) => round($val, 2))->toArray();
 
+        // 4. Hitung notifikasi aktif untuk kambing (real-time peringatan)
+        $kambings = Kambing::with(['produktivitas'])->get();
+        $kambingsWithAlerts = [];
+        
+        foreach ($kambings as $kambing) {
+            $alerts = $kambing->getNotifikasi();
+            if (!empty($alerts)) {
+                $kambingsWithAlerts[] = [
+                    'kambing' => $kambing,
+                    'alerts' => $alerts
+                ];
+            }
+        }
+
         return view('dashboard', compact(
             'totalKambing',
             'totalJantan',
@@ -67,7 +81,8 @@ class DashboardController extends Controller
             'clusterCounts',
             'chartLabels',
             'chartBobot',
-            'chartSusu'
+            'chartSusu',
+            'kambingsWithAlerts'
         ));
     }
 }

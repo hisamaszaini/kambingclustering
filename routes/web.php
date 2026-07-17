@@ -32,7 +32,7 @@ Route::middleware('auth')->group(function () {
     // Data Kambing CRUD & Features
     Route::post('kambing/import', [KambingController::class, 'import'])->name('kambing.import');
     Route::post('kambing/destroy-bulk', [KambingController::class, 'destroyBulk'])->name('kambing.destroy-bulk');
-    Route::resource('kambing', KambingController::class)->except(['show', 'create', 'edit']);
+    Route::resource('kambing', KambingController::class)->except(['create', 'edit']);
 
     // Data Produktivitas CRUD & Features
     Route::post('produktivitas/destroy-bulk', [ProduktivitasController::class, 'destroyBulk'])->name('produktivitas.destroy-bulk');

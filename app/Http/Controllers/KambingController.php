@@ -54,6 +54,49 @@ class KambingController extends Controller
     }
 
     /**
+     * Tampilkan detail data kambing beserta progres perkembangannya.
+     */
+    public function show(Kambing $kambing)
+    {
+        // Load data produktivitas diurutkan berdasarkan tanggal pencatatan terlama ke terbaru
+        $produktivitasHistory = $kambing->produktivitas()->orderBy('tanggal_pencatatan', 'asc')->get();
+
+        // Load riwayat clustering beserta data sesi clustering
+        $clusteringHistory = $kambing->hasilClustering()
+            ->with('sesi')
+            ->orderBy('id', 'desc')
+            ->get();
+
+        // Rata-rata bobot badan, tingkat kelahiran, dan produksi susu
+        $avgBobot = $produktivitasHistory->avg('bobot_badan') ?? 0;
+        $avgLahir = $produktivitasHistory->avg('tingkat_kelahiran') ?? 0;
+        $avgSusu = $produktivitasHistory->avg('produksi_susu') ?? 0;
+
+        // Data terakhir per indikator (mengabaikan nilai null)
+        $latestWeightRecord = $produktivitasHistory->whereNotNull('bobot_badan')->last();
+        $latestMilkRecord = $produktivitasHistory->whereNotNull('produksi_susu')->last();
+        $latestBirthRecord = $produktivitasHistory->whereNotNull('tingkat_kelahiran')->where('tingkat_kelahiran', '>', 0)->last();
+        $latestRecord = $produktivitasHistory->last();
+
+        // Hitung notifikasi aktif untuk kambing ini
+        $notifikasis = $kambing->getNotifikasi();
+
+        return view('kambing.show', compact(
+            'kambing',
+            'produktivitasHistory',
+            'clusteringHistory',
+            'avgBobot',
+            'avgLahir',
+            'avgSusu',
+            'latestWeightRecord',
+            'latestMilkRecord',
+            'latestBirthRecord',
+            'latestRecord',
+            'notifikasis'
+        ));
+    }
+
+    /**
      * Simpan data kambing baru.
      */
     public function store(Request $request)

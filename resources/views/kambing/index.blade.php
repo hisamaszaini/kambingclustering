@@ -155,6 +155,12 @@
                         </td>
                         <td class="px-6 py-4">
                             <div class="flex items-center justify-center space-x-2">
+                                <a href="{{ route('kambing.show', $kambing->id) }}"
+                                    class="w-8 h-8 flex items-center justify-center rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-600 hover:text-blue-700 transition"
+                                    title="Detail Perkembangan Kambing">
+                                    <i class="fa-solid fa-eye text-xs"></i>
+                                </a>
+
                                 <button @click="
                                         editKambing = {
                                             id: '{{ $kambing->id }}',

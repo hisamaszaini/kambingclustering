@@ -285,7 +285,7 @@
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Bobot Badan (kg)</label>
-                            <input type="number" step="0.01" name="bobot_badan" required placeholder="0.00" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary">
+                            <input type="number" step="0.01" name="bobot_badan" placeholder="Kosongkan jika tidak ditimbang" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary">
                         </div>
                     </div>
 
@@ -293,12 +293,12 @@
                     <div class="grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100">
                         <div>
                             <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Tingkat Kelahiran</label>
-                            <input type="number" name="tingkat_kelahiran" required value="0" :disabled="isJantan(selectedKambingId)" :class="isJantan(selectedKambingId) ? 'bg-slate-150 text-slate-400 border-slate-200 cursor-not-allowed' : ''" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary">
+                            <input type="number" name="tingkat_kelahiran" placeholder="Kosongkan jika tidak melahirkan" :disabled="isJantan(selectedKambingId)" :class="isJantan(selectedKambingId) ? 'bg-slate-150 text-slate-400 border-slate-200 cursor-not-allowed' : ''" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary">
                             <span x-show="isJantan(selectedKambingId)" class="text-[9px] text-slate-400 mt-1 block italic">Tidak berlaku untuk Jantan</span>
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Produksi Susu (Liter)</label>
-                            <input type="number" step="0.01" name="produksi_susu" required value="0.00" :disabled="isJantan(selectedKambingId)" :class="isJantan(selectedKambingId) ? 'bg-slate-150 text-slate-400 border-slate-200 cursor-not-allowed' : ''" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary">
+                            <input type="number" step="0.01" name="produksi_susu" placeholder="Kosongkan jika tidak diperah" :disabled="isJantan(selectedKambingId)" :class="isJantan(selectedKambingId) ? 'bg-slate-150 text-slate-400 border-slate-200 cursor-not-allowed' : ''" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary">
                             <span x-show="isJantan(selectedKambingId)" class="text-[9px] text-slate-400 mt-1 block italic">Tidak berlaku untuk Jantan</span>
                         </div>
                     </div>
@@ -351,7 +351,7 @@
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Bobot Badan (kg)</label>
-                            <input type="number" step="0.01" name="bobot_badan" x-model="editLog.bobot_badan" required class="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary">
+                            <input type="number" step="0.01" name="bobot_badan" x-model="editLog.bobot_badan" placeholder="Kosongkan jika tidak ditimbang" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary">
                         </div>
                     </div>
 
@@ -359,12 +359,12 @@
                     <div class="grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100">
                         <div>
                             <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Tingkat Kelahiran</label>
-                            <input type="number" name="tingkat_kelahiran" x-model="editLog.tingkat_kelahiran" required :disabled="isJantan(editKambingId)" :class="isJantan(editKambingId) ? 'bg-slate-150 text-slate-400 border-slate-200 cursor-not-allowed' : ''" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary">
+                            <input type="number" name="tingkat_kelahiran" x-model="editLog.tingkat_kelahiran" placeholder="Kosongkan jika tidak melahirkan" :disabled="isJantan(editKambingId)" :class="isJantan(editKambingId) ? 'bg-slate-150 text-slate-400 border-slate-200 cursor-not-allowed' : ''" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary">
                             <span x-show="isJantan(editKambingId)" class="text-[9px] text-slate-400 mt-1 block italic">Tidak berlaku untuk Jantan</span>
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Produksi Susu (Liter)</label>
-                            <input type="number" step="0.01" name="produksi_susu" x-model="editLog.produksi_susu" required :disabled="isJantan(editKambingId)" :class="isJantan(editKambingId) ? 'bg-slate-150 text-slate-400 border-slate-200 cursor-not-allowed' : ''" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary">
+                            <input type="number" step="0.01" name="produksi_susu" x-model="editLog.produksi_susu" placeholder="Kosongkan jika tidak diperah" :disabled="isJantan(editKambingId)" :class="isJantan(editKambingId) ? 'bg-slate-150 text-slate-400 border-slate-200 cursor-not-allowed' : ''" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary">
                             <span x-show="isJantan(editKambingId)" class="text-[9px] text-slate-400 mt-1 block italic">Tidak berlaku untuk Jantan</span>
                         </div>
                     </div>
