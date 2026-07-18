@@ -84,10 +84,37 @@
         </button>
     </div>
 
+    <!-- Tab Filter Kategori -->
+    <div class="flex flex-wrap gap-1 bg-white p-1.5 rounded-2xl border border-slate-200 shadow-sm">
+        <a href="{{ route('produktivitas.index', array_merge(request()->query(), ['filter_type' => 'all'])) }}" 
+            class="flex items-center space-x-2 px-4 py-2.5 rounded-xl font-bold text-xs transition duration-200 {{ $filterType === 'all' ? 'bg-primary text-white shadow-sm' : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50' }}">
+            <span><i class="fa-solid fa-list text-xs"></i></span>
+            <span>Semua Aktivitas</span>
+        </a>
+        <a href="{{ route('produktivitas.index', array_merge(request()->query(), ['filter_type' => 'susu'])) }}" 
+            class="flex items-center space-x-2 px-4 py-2.5 rounded-xl font-bold text-xs transition duration-200 {{ $filterType === 'susu' ? 'bg-primary text-white shadow-sm' : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50' }}">
+            <span><i class="fa-solid fa-glass-water text-xs"></i></span>
+            <span>Riwayat Susu</span>
+        </a>
+        <a href="{{ route('produktivitas.index', array_merge(request()->query(), ['filter_type' => 'bobot'])) }}" 
+            class="flex items-center space-x-2 px-4 py-2.5 rounded-xl font-bold text-xs transition duration-200 {{ $filterType === 'bobot' ? 'bg-primary text-white shadow-sm' : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50' }}">
+            <span><i class="fa-solid fa-weight-scale text-xs"></i></span>
+            <span>Riwayat Bobot</span>
+        </a>
+        <a href="{{ route('produktivitas.index', array_merge(request()->query(), ['filter_type' => 'kelahiran'])) }}" 
+            class="flex items-center space-x-2 px-4 py-2.5 rounded-xl font-bold text-xs transition duration-200 {{ $filterType === 'kelahiran' ? 'bg-primary text-white shadow-sm' : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50' }}">
+            <span><i class="fa-solid fa-baby text-xs"></i></span>
+            <span>Riwayat Kelahiran</span>
+        </a>
+    </div>
+
     <!-- Search, Sort & Bulk Action Area -->
     <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
         <!-- Search and Date Range Form -->
         <form action="{{ route('produktivitas.index') }}" method="GET" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-end">
+            <!-- Hidden Input for filter_type -->
+            <input type="hidden" name="filter_type" value="{{ $filterType }}">
+
             <!-- Search -->
             <div class="space-y-1">
                 <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider">Cari Kambing</label>
@@ -115,7 +142,7 @@
                     Filter Data
                 </button>
                 @if($search || $kambingId || $startDate || $endDate)
-                <a href="{{ route('produktivitas.index', ['per_page' => $perPage]) }}" class="py-2 px-4 border border-slate-200 hover:bg-slate-50 text-slate-600 rounded-xl text-xs font-bold transition flex items-center justify-center">
+                <a href="{{ route('produktivitas.index', ['filter_type' => $filterType, 'per_page' => $perPage]) }}" class="py-2 px-4 border border-slate-200 hover:bg-slate-50 text-slate-600 rounded-xl text-xs font-bold transition flex items-center justify-center">
                     Reset
                 </a>
                 @endif
@@ -151,10 +178,10 @@
                 <div class="flex items-center space-x-1">
                     <span>Baris:</span>
                     <select onchange="window.location.href=this.value" class="bg-transparent border-none focus:ring-0 text-slate-700 font-semibold cursor-pointer">
-                        <option value="{{ route('produktivitas.index', ['search' => $search, 'start_date' => $startDate, 'end_date' => $endDate, 'sort_by' => $sortBy, 'sort_dir' => $sortDir, 'per_page' => 10]) }}" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
-                        <option value="{{ route('produktivitas.index', ['search' => $search, 'start_date' => $startDate, 'end_date' => $endDate, 'sort_by' => $sortBy, 'sort_dir' => $sortDir, 'per_page' => 25]) }}" {{ $perPage == 25 ? 'selected' : '' }}>25</option>
-                        <option value="{{ route('produktivitas.index', ['search' => $search, 'start_date' => $startDate, 'end_date' => $endDate, 'sort_by' => $sortBy, 'sort_dir' => $sortDir, 'per_page' => 50]) }}" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
-                        <option value="{{ route('produktivitas.index', ['search' => $search, 'start_date' => $startDate, 'end_date' => $endDate, 'sort_by' => $sortBy, 'sort_dir' => $sortDir, 'per_page' => 100]) }}" {{ $perPage == 100 ? 'selected' : '' }}>100</option>
+                        <option value="{{ route('produktivitas.index', ['filter_type' => $filterType, 'search' => $search, 'start_date' => $startDate, 'end_date' => $endDate, 'sort_by' => $sortBy, 'sort_dir' => $sortDir, 'per_page' => 10]) }}" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
+                        <option value="{{ route('produktivitas.index', ['filter_type' => $filterType, 'search' => $search, 'start_date' => $startDate, 'end_date' => $endDate, 'sort_by' => $sortBy, 'sort_dir' => $sortDir, 'per_page' => 25]) }}" {{ $perPage == 25 ? 'selected' : '' }}>25</option>
+                        <option value="{{ route('produktivitas.index', ['filter_type' => $filterType, 'search' => $search, 'start_date' => $startDate, 'end_date' => $endDate, 'sort_by' => $sortBy, 'sort_dir' => $sortDir, 'per_page' => 50]) }}" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
+                        <option value="{{ route('produktivitas.index', ['filter_type' => $filterType, 'search' => $search, 'start_date' => $startDate, 'end_date' => $endDate, 'sort_by' => $sortBy, 'sort_dir' => $sortDir, 'per_page' => 100]) }}" {{ $perPage == 100 ? 'selected' : '' }}>100</option>
                     </select>
                 </div>
             </div>
@@ -171,35 +198,41 @@
                             <input type="checkbox" :checked="selectAll" @click="toggleSelectAll" class="w-4 h-4 text-primary border-slate-300 rounded focus:ring-primary cursor-pointer">
                         </th>
                         <th class="px-6 py-4">
-                            <a href="{{ route('produktivitas.index', ['search' => $search, 'start_date' => $startDate, 'end_date' => $endDate, 'sort_by' => 'kode_kambing', 'sort_dir' => $sortBy == 'kode_kambing' && $sortDir == 'asc' ? 'desc' : 'asc', 'per_page' => $perPage]) }}" class="flex items-center space-x-1 hover:text-slate-700">
+                            <a href="{{ route('produktivitas.index', ['filter_type' => $filterType, 'search' => $search, 'start_date' => $startDate, 'end_date' => $endDate, 'sort_by' => 'kode_kambing', 'sort_dir' => $sortBy == 'kode_kambing' && $sortDir == 'asc' ? 'desc' : 'asc', 'per_page' => $perPage]) }}" class="flex items-center space-x-1 hover:text-slate-700">
                                 <span>Kode Kambing</span>
                                 <span>{!! $sortBy == 'kode_kambing' ? ($sortDir == 'asc' ? '↑' : '↓') : '↕' !!}</span>
                             </a>
                         </th>
                         <th class="px-6 py-4">
-                            <a href="{{ route('produktivitas.index', ['search' => $search, 'start_date' => $startDate, 'end_date' => $endDate, 'sort_by' => 'tanggal_pencatatan', 'sort_dir' => $sortBy == 'tanggal_pencatatan' && $sortDir == 'asc' ? 'desc' : 'asc', 'per_page' => $perPage]) }}" class="flex items-center space-x-1 hover:text-slate-700">
+                            <a href="{{ route('produktivitas.index', ['filter_type' => $filterType, 'search' => $search, 'start_date' => $startDate, 'end_date' => $endDate, 'sort_by' => 'tanggal_pencatatan', 'sort_dir' => $sortBy == 'tanggal_pencatatan' && $sortDir == 'asc' ? 'desc' : 'asc', 'per_page' => $perPage]) }}" class="flex items-center space-x-1 hover:text-slate-700">
                                 <span>Tanggal Pencatatan</span>
                                 <span>{!! $sortBy == 'tanggal_pencatatan' ? ($sortDir == 'asc' ? '↑' : '↓') : '↕' !!}</span>
                             </a>
                         </th>
+                        @if($filterType === 'all' || $filterType === 'bobot')
                         <th class="px-6 py-4">
-                            <a href="{{ route('produktivitas.index', ['search' => $search, 'start_date' => $startDate, 'end_date' => $endDate, 'sort_by' => 'bobot_badan', 'sort_dir' => $sortBy == 'bobot_badan' && $sortDir == 'asc' ? 'desc' : 'asc', 'per_page' => $perPage]) }}" class="flex items-center space-x-1 hover:text-slate-700">
+                            <a href="{{ route('produktivitas.index', ['filter_type' => $filterType, 'search' => $search, 'start_date' => $startDate, 'end_date' => $endDate, 'sort_by' => 'bobot_badan', 'sort_dir' => $sortBy == 'bobot_badan' && $sortDir == 'asc' ? 'desc' : 'asc', 'per_page' => $perPage]) }}" class="flex items-center space-x-1 hover:text-slate-700">
                                 <span>Bobot Badan</span>
                                 <span>{!! $sortBy == 'bobot_badan' ? ($sortDir == 'asc' ? '↑' : '↓') : '↕' !!}</span>
                             </a>
                         </th>
+                        @endif
+                        @if($filterType === 'all' || $filterType === 'kelahiran')
                         <th class="px-6 py-4">
-                            <a href="{{ route('produktivitas.index', ['search' => $search, 'start_date' => $startDate, 'end_date' => $endDate, 'sort_by' => 'tingkat_kelahiran', 'sort_dir' => $sortBy == 'tingkat_kelahiran' && $sortDir == 'asc' ? 'desc' : 'asc', 'per_page' => $perPage]) }}" class="flex items-center space-x-1 hover:text-slate-700">
+                            <a href="{{ route('produktivitas.index', ['filter_type' => $filterType, 'search' => $search, 'start_date' => $startDate, 'end_date' => $endDate, 'sort_by' => 'tingkat_kelahiran', 'sort_dir' => $sortBy == 'tingkat_kelahiran' && $sortDir == 'asc' ? 'desc' : 'asc', 'per_page' => $perPage]) }}" class="flex items-center space-x-1 hover:text-slate-700">
                                 <span>Tingkat Kelahiran</span>
                                 <span>{!! $sortBy == 'tingkat_kelahiran' ? ($sortDir == 'asc' ? '↑' : '↓') : '↕' !!}</span>
                             </a>
                         </th>
+                        @endif
+                        @if($filterType === 'all' || $filterType === 'susu')
                         <th class="px-6 py-4">
-                            <a href="{{ route('produktivitas.index', ['search' => $search, 'start_date' => $startDate, 'end_date' => $endDate, 'sort_by' => 'produksi_susu', 'sort_dir' => $sortBy == 'produksi_susu' && $sortDir == 'asc' ? 'desc' : 'asc', 'per_page' => $perPage]) }}" class="flex items-center space-x-1 hover:text-slate-700">
+                            <a href="{{ route('produktivitas.index', ['filter_type' => $filterType, 'search' => $search, 'start_date' => $startDate, 'end_date' => $endDate, 'sort_by' => 'produksi_susu', 'sort_dir' => $sortBy == 'produksi_susu' && $sortDir == 'asc' ? 'desc' : 'asc', 'per_page' => $perPage]) }}" class="flex items-center space-x-1 hover:text-slate-700">
                                 <span>Produksi Susu</span>
                                 <span>{!! $sortBy == 'produksi_susu' ? ($sortDir == 'asc' ? '↑' : '↓') : '↕' !!}</span>
                             </a>
                         </th>
+                        @endif
                         <th class="px-6 py-4 text-center">Aksi</th>
                     </tr>
                 </thead>
@@ -212,21 +245,41 @@
                         </td>
                         <td class="px-6 py-4 font-semibold text-slate-800">{{ $log->kambing->kode_kambing }}</td>
                         <td class="px-6 py-4 text-slate-500">{{ \Carbon\Carbon::parse($log->tanggal_pencatatan)->translatedFormat('d M Y') }}</td>
-                        <td class="px-6 py-4 font-bold text-slate-700">{{ $log->bobot_badan }} kg</td>
+                        
+                        @if($filterType === 'all' || $filterType === 'bobot')
+                        <td class="px-6 py-4">
+                            @if(is_null($log->bobot_badan))
+                            <span class="text-slate-350 font-bold">-</span>
+                            @else
+                            <span class="font-bold text-slate-700">{{ $log->bobot_badan }} kg</span>
+                            @endif
+                        </td>
+                        @endif
+
+                        @if($filterType === 'all' || $filterType === 'kelahiran')
                         <td class="px-6 py-4">
                             @if($log->kambing->jenis_kelamin === 'Jantan')
                             <span class="text-slate-300 text-xxs font-normal italic">N/A (Jantan)</span>
+                            @elseif(is_null($log->tingkat_kelahiran))
+                            <span class="text-slate-350 font-bold">-</span>
                             @else
                             <span class="font-bold">{{ $log->tingkat_kelahiran }} ekor</span>
                             @endif
                         </td>
+                        @endif
+
+                        @if($filterType === 'all' || $filterType === 'susu')
                         <td class="px-6 py-4">
                             @if($log->kambing->jenis_kelamin === 'Jantan')
                             <span class="text-slate-300 text-xxs font-normal italic">N/A (Jantan)</span>
+                            @elseif(is_null($log->produksi_susu))
+                            <span class="text-slate-350 font-bold">-</span>
                             @else
                             <span class="font-bold text-primary">{{ $log->produksi_susu }} L</span>
                             @endif
                         </td>
+                        @endif
+
                         <td class="px-6 py-4">
                             <div class="flex items-center justify-center space-x-2">
                                 <button @click="
@@ -259,7 +312,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="7" class="px-6 py-12 text-center text-slate-400">
+                        <td colspan="{{ $filterType === 'all' ? 7 : 5 }}" class="px-6 py-12 text-center text-slate-400">
                             <div class="text-3xl text-slate-300 mb-2"><i class="fa-solid fa-scale-balanced"></i></div>
                             <div class="text-xs font-semibold">Data log produktivitas tidak ditemukan</div>
                             <div class="text-xxs font-medium text-slate-400">Silakan pilih filter lain atau masukkan pencatatan baru.</div>

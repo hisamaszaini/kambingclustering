@@ -244,9 +244,9 @@
                 <span class="block font-bold text-primary">1. Parameter Pengelompokan (Kriteria)</span>
                 <p>Sistem ini mengagregasikan data log produktivitas periodik setiap kambing ke dalam 3 parameter koordinat geometri:</p>
                 <ul class="space-y-1.5 pl-2 mt-1 list-disc list-inside">
-                    <li><strong class="font-bold text-slate-700">C1 - Bobot Badan (kg):</strong> Nilai rata-rata dari semua pencatatan bobot badan kambing.</li>
-                    <li><strong class="font-bold text-slate-700">C2 - Tingkat Kelahiran (ekor):</strong> Nilai maksimum kelahiran yang dicapai kambing.</li>
-                    <li><strong class="font-bold text-slate-700">C3 - Produksi Susu (Liter):</strong> Nilai rata-rata produksi susu harian kambing.</li>
+                    <li><strong class="font-bold text-slate-700">C1 - Bobot Badan (kg):</strong> Nilai penimbangan terakhir (terbaru) kambing.</li>
+                    <li><strong class="font-bold text-slate-700">C2 - Tingkat Kelahiran (ekor):</strong> Jumlah total anak yang lahir dalam 6 bulan terakhir.</li>
+                    <li><strong class="font-bold text-slate-700">C3 - Produksi Susu (Liter):</strong> Rata-rata produksi susu harian dalam 30 hari terakhir.</li>
                 </ul>
                 <p class="mt-2">Jarak Euclidean dihitung secara geometris tanpa bobot kriteria ($w_j = 1$):</p>
                 <div class="py-2 text-center font-bold text-slate-700 bg-slate-50 rounded-xl border border-slate-100 mt-1">

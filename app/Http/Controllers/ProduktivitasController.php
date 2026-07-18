@@ -17,6 +17,7 @@ class ProduktivitasController extends Controller
         $kambingId = $request->input('kambing_id');
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
+        $filterType = $request->input('filter_type', 'all');
 
         $sortBy = $request->input('sort_by', 'tanggal_pencatatan');
         $sortDir = $request->input('sort_dir', 'desc');
@@ -36,6 +37,11 @@ class ProduktivitasController extends Controller
         $allowedPerPage = [10, 25, 50, 100];
         if (!in_array($perPage, $allowedPerPage)) {
             $perPage = 10;
+        }
+
+        $allowedFilterTypes = ['all', 'susu', 'bobot', 'kelahiran'];
+        if (!in_array($filterType, $allowedFilterTypes)) {
+            $filterType = 'all';
         }
 
         // Gunakan join jika sort berdasarkan kode_kambing
@@ -59,6 +65,16 @@ class ProduktivitasController extends Controller
             $query->whereDate('tbl_data_produktivitas.tanggal_pencatatan', '<=', $endDate);
         }
 
+        // Filter berdasarkan tipe data produktivitas
+        if ($filterType === 'susu') {
+            $query->whereNotNull('tbl_data_produktivitas.produksi_susu');
+        } elseif ($filterType === 'bobot') {
+            $query->whereNotNull('tbl_data_produktivitas.bobot_badan');
+        } elseif ($filterType === 'kelahiran') {
+            $query->whereNotNull('tbl_data_produktivitas.tingkat_kelahiran')
+                  ->where('tbl_data_produktivitas.tingkat_kelahiran', '>', 0);
+        }
+
         // Apply sorting
         if ($sortBy === 'kode_kambing') {
             $query->orderBy('tbl_kambing.kode_kambing', $sortDir);
@@ -69,7 +85,7 @@ class ProduktivitasController extends Controller
         $produktivitasList = $query->paginate($perPage)->withQueryString();
         $kambings = Kambing::orderBy('kode_kambing', 'asc')->get();
 
-        return view('produktivitas.index', compact('produktivitasList', 'kambings', 'search', 'kambingId', 'startDate', 'endDate', 'sortBy', 'sortDir', 'perPage'));
+        return view('produktivitas.index', compact('produktivitasList', 'kambings', 'search', 'kambingId', 'startDate', 'endDate', 'sortBy', 'sortDir', 'perPage', 'filterType'));
     }
 
     /**

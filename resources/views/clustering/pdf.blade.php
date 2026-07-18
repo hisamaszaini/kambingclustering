@@ -215,9 +215,9 @@
         <thead>
             <tr>
                 <th>Kluster</th>
-                <th class="text-center">Rata-rata Bobot (kg)</th>
-                <th class="text-center">Maks Tingkat Kelahiran (ekor)</th>
-                <th class="text-center">Rata-rata Produksi Susu (Liter)</th>
+                <th class="text-center">Bobot Terakhir (kg)</th>
+                <th class="text-center">Lahir 6 Bulan (ekor)</th>
+                <th class="text-center">Avg Susu 30 Hari (L)</th>
                 <th class="text-center">Jumlah Anggota</th>
             </tr>
         </thead>
@@ -262,8 +262,8 @@
                 <th style="width: 5%">No</th>
                 <th style="width: 15%">Kode Kambing</th>
                 <th style="width: 15%">Jenis Kelamin</th>
-                <th class="text-center" style="width: 15%">Avg Bobot</th>
-                <th class="text-center" style="width: 15%">Max Lahir</th>
+                <th class="text-center" style="width: 15%">Bobot Terakhir</th>
+                <th class="text-center" style="width: 15%">Lahir 6 Bln</th>
                 <th class="text-center" style="width: 15%">Avg Susu</th>
                 <th class="text-center" style="width: 20%">Kluster Akhir</th>
             </tr>
@@ -290,7 +290,7 @@
                     @if($h->kambing->jenis_kelamin == 'Jantan')
                     -
                     @else
-                    {{ $h->produksi_susu_val }} L
+                    {{ number_format($h->produksi_susu_val, 2) }} L
                     @endif
                 </td>
                 <td class="text-center">

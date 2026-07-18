@@ -31,7 +31,7 @@
         <div class="bg-gradient-to-br from-primary to-orange-600 p-8 text-white text-center space-y-3 relative">
             <span class="px-2.5 py-1 bg-white/20 rounded-full text-xxs font-semibold tracking-wider uppercase">Fase Perhitungan</span>
             <h2 class="text-xl font-bold">Mulai Pengelompokan Kinerja Produktivitas Kambing</h2>
-            <p class="text-orange-100 text-xs font-medium max-w-lg mx-auto">Sistem akan mengagregasikan log data produktivitas harian/bulanan ke dalam parameter 3-dimensi (C1 Bobot Badan, C2 Tingkat Kelahiran, C3 Produksi Susu) dari seluruh kambing, lalu mengklasifikasikannya secara objektif.</p>
+            <p class="text-orange-100 text-xs font-medium max-w-lg mx-auto">Sistem akan mengagregasikan log data produktivitas ke dalam parameter 3-dimensi (C1 Bobot Terakhir, C2 Kelahiran 6 Bulan Terakhir, C3 Rata-rata Susu 30 Hari Terakhir) dari seluruh kambing, lalu mengklasifikasikannya secara objektif.</p>
 
             @if($totalKambing > 0)
             <form action="{{ route('clustering.proses') }}" method="POST" class="pt-4">
@@ -71,7 +71,7 @@
                             <span class="text-slate-600 truncate font-semibold">{{ $centroidAwal['Rendah']['kode_kambing'] }}</span>
                         </div>
                         <div class="text-[9px] text-slate-400 pl-4 border-l border-red-200">
-                            Bobot: {{ $centroidAwal['Rendah']['scores']['C1'] }} kg | Lahir: {{ $centroidAwal['Rendah']['scores']['C2'] }} ekor | Susu: {{ $centroidAwal['Rendah']['scores']['C3'] }} L
+                            Bobot: {{ $centroidAwal['Rendah']['scores']['C1'] }} kg | Lahir: {{ $centroidAwal['Rendah']['scores']['C2'] }} ekor | Susu: {{ number_format($centroidAwal['Rendah']['scores']['C3'], 2) }} L
                         </div>
 
                         <div class="flex justify-between items-center mt-1 pt-1 border-t border-slate-50">
@@ -79,7 +79,7 @@
                             <span class="text-slate-600 truncate font-semibold">{{ $centroidAwal['Sedang']['kode_kambing'] }}</span>
                         </div>
                         <div class="text-[9px] text-slate-400 pl-4 border-l border-amber-200">
-                            Bobot: {{ $centroidAwal['Sedang']['scores']['C1'] }} kg | Lahir: {{ $centroidAwal['Sedang']['scores']['C2'] }} ekor | Susu: {{ $centroidAwal['Sedang']['scores']['C3'] }} L
+                            Bobot: {{ $centroidAwal['Sedang']['scores']['C1'] }} kg | Lahir: {{ $centroidAwal['Sedang']['scores']['C2'] }} ekor | Susu: {{ number_format($centroidAwal['Sedang']['scores']['C3'], 2) }} L
                         </div>
 
                         <div class="flex justify-between items-center mt-1 pt-1 border-t border-slate-50">
@@ -87,7 +87,7 @@
                             <span class="text-slate-600 truncate font-semibold">{{ $centroidAwal['Tinggi']['kode_kambing'] }}</span>
                         </div>
                         <div class="text-[9px] text-slate-400 pl-4 border-l border-emerald-200">
-                            Bobot: {{ $centroidAwal['Tinggi']['scores']['C1'] }} kg | Lahir: {{ $centroidAwal['Tinggi']['scores']['C2'] }} ekor | Susu: {{ $centroidAwal['Tinggi']['scores']['C3'] }} L
+                            Bobot: {{ $centroidAwal['Tinggi']['scores']['C1'] }} kg | Lahir: {{ $centroidAwal['Tinggi']['scores']['C2'] }} ekor | Susu: {{ number_format($centroidAwal['Tinggi']['scores']['C3'], 2) }} L
                         </div>
                         @else
                         <span class="text-slate-400 italic">Data kambing dan log produktivitas belum tersedia.</span>
@@ -153,7 +153,7 @@
                         </div>
                         <div>
                             <span class="block text-slate-400 text-[9px]">Susu (L)</span>
-                            <span class="font-bold text-slate-700">{{ $centroidAwal['Rendah']['scores']['C3'] }}</span>
+                            <span class="font-bold text-slate-700">{{ number_format($centroidAwal['Rendah']['scores']['C3'], 2) }}</span>
                         </div>
                     </div>
                 </div>
@@ -176,7 +176,7 @@
                         </div>
                         <div>
                             <span class="block text-slate-400 text-[9px]">Susu (L)</span>
-                            <span class="font-bold text-slate-700">{{ $centroidAwal['Sedang']['scores']['C3'] }}</span>
+                            <span class="font-bold text-slate-700">{{ number_format($centroidAwal['Sedang']['scores']['C3'], 2) }}</span>
                         </div>
                     </div>
                 </div>
@@ -199,7 +199,7 @@
                         </div>
                         <div>
                             <span class="block text-slate-400 text-[9px]">Susu (L)</span>
-                            <span class="font-bold text-slate-700">{{ $centroidAwal['Tinggi']['scores']['C3'] }}</span>
+                            <span class="font-bold text-slate-700">{{ number_format($centroidAwal['Tinggi']['scores']['C3'], 2) }}</span>
                         </div>
                     </div>
                 </div>
@@ -234,19 +234,19 @@
                         <div class="p-3 bg-red-50/50 border border-red-100/50 rounded-xl space-y-1">
                             <span class="block text-xxs text-red-800 font-semibold">C1 (Rendah)</span>
                             <span class="block text-xs font-bold text-slate-700">Bobot: {{ $log['centroids']['Rendah']['C1'] }} kg</span>
-                            <span class="block text-[9px] text-slate-400 font-medium">Lahir: {{ $log['centroids']['Rendah']['C2'] }} | Susu: {{ $log['centroids']['Rendah']['C3'] }} L</span>
+                            <span class="block text-[9px] text-slate-400 font-medium">Lahir: {{ $log['centroids']['Rendah']['C2'] }} | Susu: {{ number_format($log['centroids']['Rendah']['C3'], 2) }} L</span>
                         </div>
                         <!-- Sedang Centroid -->
                         <div class="p-3 bg-amber-50/50 border border-amber-100/50 rounded-xl space-y-1">
                             <span class="block text-xxs text-amber-800 font-semibold">C2 (Sedang)</span>
                             <span class="block text-xs font-bold text-slate-700">Bobot: {{ $log['centroids']['Sedang']['C1'] }} kg</span>
-                            <span class="block text-[9px] text-slate-400 font-medium">Lahir: {{ $log['centroids']['Sedang']['C2'] }} | Susu: {{ $log['centroids']['Sedang']['C3'] }} L</span>
+                            <span class="block text-[9px] text-slate-400 font-medium">Lahir: {{ $log['centroids']['Sedang']['C2'] }} | Susu: {{ number_format($log['centroids']['Sedang']['C3'], 2) }} L</span>
                         </div>
                         <!-- Tinggi Centroid -->
                         <div class="p-3 bg-emerald-50/50 border border-emerald-100/50 rounded-xl space-y-1">
                             <span class="block text-xxs text-emerald-800 font-semibold">C3 (Tinggi)</span>
                             <span class="block text-xs font-bold text-slate-700">Bobot: {{ $log['centroids']['Tinggi']['C1'] }} kg</span>
-                            <span class="block text-[9px] text-slate-400 font-medium">Lahir: {{ $log['centroids']['Tinggi']['C2'] }} | Susu: {{ $log['centroids']['Tinggi']['C3'] }} L</span>
+                            <span class="block text-[9px] text-slate-400 font-medium">Lahir: {{ $log['centroids']['Tinggi']['C2'] }} | Susu: {{ number_format($log['centroids']['Tinggi']['C3'], 2) }} L</span>
                         </div>
                     </div>
                 </div>
@@ -283,8 +283,8 @@
                         <thead>
                             <tr class="bg-slate-50 border-b border-slate-100 text-slate-500 text-xs font-bold uppercase tracking-wider">
                                 <th class="px-6 py-4">Kode Kambing</th>
-                                <th class="px-6 py-4 text-center">Avg Bobot</th>
-                                <th class="px-6 py-4 text-center">Max Lahir</th>
+                                <th class="px-6 py-4 text-center">Bobot Terakhir</th>
+                                <th class="px-6 py-4 text-center">Lahir 6 Bln</th>
                                 <th class="px-6 py-4 text-center">Avg Susu</th>
                                 <th class="px-6 py-4 text-center bg-slate-100/50 text-slate-700">Jarak ke Rendah (C1)</th>
                                 <th class="px-6 py-4 text-center bg-slate-100/50 text-slate-700">Jarak ke Sedang (C2)</th>
@@ -309,7 +309,7 @@
                                 <!-- Agregasi Parameter -->
                                 <td class="px-6 py-3.5 text-center text-slate-400 font-normal">{{ $detail['scores']['C1'] }} kg</td>
                                 <td class="px-6 py-3.5 text-center text-slate-400 font-normal">{{ $detail['scores']['C2'] }} ekor</td>
-                                <td class="px-6 py-3.5 text-center text-slate-400 font-normal">{{ $detail['scores']['C3'] }} L</td>
+                                <td class="px-6 py-3.5 text-center text-slate-400 font-normal">{{ number_format($detail['scores']['C3'], 2) }} L</td>
 
                                 <!-- Euclidean distances with smallest highlighted -->
                                 <td class="px-6 py-3.5 text-center bg-slate-50/20 {{ $c1 == $minDist ? 'bg-red-50 text-red-700 border-x border-red-100/50 font-bold' : 'text-slate-400 font-normal' }}">

@@ -29,15 +29,23 @@ class KMeansService
         // Siapkan dataset agregat dalam bentuk koordinat: [kambing_id => [C1, C2, C3]]
         $dataset = [];
         $kambingInfo = []; // Menyimpan detail untuk log
+        $sixMonthsAgo = now()->subMonths(6)->toDateString();
+        $thirtyDaysAgo = now()->subDays(30)->toDateString();
 
         foreach ($kambings as $kambing) {
-            $avgBobot = $kambing->produktivitas->avg('bobot_badan') ?? 0;
-            $maxKelahiran = $kambing->produktivitas->max('tingkat_kelahiran') ?? 0;
-            $avgSusu = $kambing->produktivitas->avg('produksi_susu') ?? 0;
+            // C1: Bobot Terakhir
+            $latestWeightRecord = $kambing->produktivitas->whereNotNull('bobot_badan')->sortByDesc('tanggal_pencatatan')->first();
+            $latestBobot = $latestWeightRecord ? (float)$latestWeightRecord->bobot_badan : 0.0;
+
+            // C2: Anak 6 bulan terakhir
+            $sumKelahiran = $kambing->produktivitas->where('tanggal_pencatatan', '>=', $sixMonthsAgo)->sum('tingkat_kelahiran');
+
+            // C3: Susu 30 hari terakhir
+            $avgSusu = $kambing->produktivitas->where('tanggal_pencatatan', '>=', $thirtyDaysAgo)->avg('produksi_susu') ?? 0.0;
 
             $dataset[$kambing->id] = [
-                'C1' => (float)$avgBobot,
-                'C2' => (float)$maxKelahiran,
+                'C1' => $latestBobot,
+                'C2' => (float)$sumKelahiran,
                 'C3' => (float)$avgSusu
             ];
 
@@ -234,15 +242,23 @@ class KMeansService
 
         $dataset = [];
         $kambingInfo = [];
+        $sixMonthsAgo = now()->subMonths(6)->toDateString();
+        $thirtyDaysAgo = now()->subDays(30)->toDateString();
 
         foreach ($kambings as $kambing) {
-            $avgBobot = $kambing->produktivitas->avg('bobot_badan') ?? 0;
-            $maxKelahiran = $kambing->produktivitas->max('tingkat_kelahiran') ?? 0;
-            $avgSusu = $kambing->produktivitas->avg('produksi_susu') ?? 0;
+            // C1: Bobot Terakhir
+            $latestWeightRecord = $kambing->produktivitas->whereNotNull('bobot_badan')->sortByDesc('tanggal_pencatatan')->first();
+            $latestBobot = $latestWeightRecord ? (float)$latestWeightRecord->bobot_badan : 0.0;
+
+            // C2: Anak 6 bulan terakhir
+            $sumKelahiran = $kambing->produktivitas->where('tanggal_pencatatan', '>=', $sixMonthsAgo)->sum('tingkat_kelahiran');
+
+            // C3: Susu 30 hari terakhir
+            $avgSusu = $kambing->produktivitas->where('tanggal_pencatatan', '>=', $thirtyDaysAgo)->avg('produksi_susu') ?? 0.0;
 
             $dataset[$kambing->id] = [
-                'C1' => (float)$avgBobot,
-                'C2' => (float)$maxKelahiran,
+                'C1' => $latestBobot,
+                'C2' => (float)$sumKelahiran,
                 'C3' => (float)$avgSusu
             ];
 

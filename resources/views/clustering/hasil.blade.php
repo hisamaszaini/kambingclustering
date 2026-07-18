@@ -86,11 +86,11 @@
             </div>
             <div class="space-y-1.5 border-t border-emerald-100/50 pt-3 text-[11px] font-medium text-slate-655">
                 <div class="flex justify-between items-center">
-                    <span class="text-slate-450">Avg Bobot</span>
+                    <span class="text-slate-450">Bobot Terakhir</span>
                     <span class="font-bold text-slate-700">{{ $clusterAverages['Tinggi']['C1'] }} kg</span>
                 </div>
                 <div class="flex justify-between items-center">
-                    <span class="text-slate-450">Max Lahir</span>
+                    <span class="text-slate-450">Lahir 6 Bln</span>
                     <span class="font-bold text-slate-700">{{ $clusterAverages['Tinggi']['C2'] }} ekor</span>
                 </div>
                 <div class="flex justify-between items-center">
@@ -113,11 +113,11 @@
             </div>
             <div class="space-y-1.5 border-t border-amber-100/50 pt-3 text-[11px] font-medium text-slate-655">
                 <div class="flex justify-between items-center">
-                    <span class="text-slate-450">Avg Bobot</span>
+                    <span class="text-slate-450">Bobot Terakhir</span>
                     <span class="font-bold text-slate-700">{{ $clusterAverages['Sedang']['C1'] }} kg</span>
                 </div>
                 <div class="flex justify-between items-center">
-                    <span class="text-slate-450">Max Lahir</span>
+                    <span class="text-slate-450">Lahir 6 Bln</span>
                     <span class="font-bold text-slate-700">{{ $clusterAverages['Sedang']['C2'] }} ekor</span>
                 </div>
                 <div class="flex justify-between items-center">
@@ -140,11 +140,11 @@
             </div>
             <div class="space-y-1.5 border-t border-red-100/50 pt-3 text-[11px] font-medium text-slate-655">
                 <div class="flex justify-between items-center">
-                    <span class="text-slate-450">Avg Bobot</span>
+                    <span class="text-slate-450">Bobot Terakhir</span>
                     <span class="font-bold text-slate-700">{{ $clusterAverages['Rendah']['C1'] }} kg</span>
                 </div>
                 <div class="flex justify-between items-center">
-                    <span class="text-slate-450">Max Lahir</span>
+                    <span class="text-slate-450">Lahir 6 Bln</span>
                     <span class="font-bold text-slate-700">{{ $clusterAverages['Rendah']['C2'] }} ekor</span>
                 </div>
                 <div class="flex justify-between items-center">
@@ -181,8 +181,8 @@
                     <tr class="bg-slate-50 border-b border-slate-100 text-slate-500 text-xs font-bold uppercase tracking-wider">
                         <th class="px-6 py-4">Kode Kambing</th>
                         <th class="px-6 py-4">Gender</th>
-                        <th class="px-6 py-4 text-center">Avg Bobot</th>
-                        <th class="px-6 py-4 text-center">Max Lahir</th>
+                        <th class="px-6 py-4 text-center">Bobot Terakhir</th>
+                        <th class="px-6 py-4 text-center">Lahir 6 Bln</th>
                         <th class="px-6 py-4 text-center">Avg Susu</th>
                         <th class="px-6 py-4 text-center">Jarak Rendah</th>
                         <th class="px-6 py-4 text-center">Jarak Sedang</th>
@@ -211,7 +211,7 @@
                             @if($h->kambing->jenis_kelamin == 'Jantan')
                             <span class="text-slate-300 italic text-[10px] font-normal">N/A</span>
                             @else
-                            {{ $h->produksi_susu_val }} L
+                            {{ number_format($h->produksi_susu_val, 2) }} L
                             @endif
                         </td>
                         <td class="px-6 py-3.5 text-center font-normal text-slate-400">{{ round($h->jarak_c1, 3) }}</td>
