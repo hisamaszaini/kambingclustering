@@ -38,6 +38,35 @@
                     this.selectAll = true;
                 }
             }
+        },
+        searchAddKambing: '',
+        searchEditKambing: '',
+        openAddKambingDropdown: false,
+        openEditKambingDropdown: false,
+        kambingList: [
+            @foreach($kambings as $k)
+                { id: '{{ $k->id }}', kode: '{{ $k->kode_kambing }}', jenis: '{{ $k->jenis_kelamin }}' },
+            @endforeach
+        ],
+        get filteredAddKambings() {
+            if (!this.searchAddKambing) return this.kambingList.slice(0, 20);
+            const query = this.searchAddKambing.toLowerCase();
+            return this.kambingList.filter(k => 
+                k.kode.toLowerCase().includes(query) || 
+                k.jenis.toLowerCase().includes(query)
+            ).slice(0, 20);
+        },
+        get filteredEditKambings() {
+            if (!this.searchEditKambing) return this.kambingList.slice(0, 20);
+            const query = this.searchEditKambing.toLowerCase();
+            return this.kambingList.filter(k => 
+                k.kode.toLowerCase().includes(query) || 
+                k.jenis.toLowerCase().includes(query)
+            ).slice(0, 20);
+        },
+        getSelectedKambingText(id) {
+            const k = this.kambingList.find(item => item.id == id);
+            return k ? `${k.kode} (${k.jenis})` : 'Pilih Kambing';
         }
     }"
     class="space-y-6">
@@ -49,7 +78,7 @@
             <p class="text-slate-400 text-xs font-medium mt-0.5">Catat bobot badan (bulanan), tingkat kelahiran, dan produksi susu (harian) kambing secara periodik.</p>
         </div>
 
-        <button @click="openAddModal = true; selectedKambingId = '{{ $kambings->first()->id ?? '' }}'" class="px-4 py-2 bg-primary hover:bg-primary-hover text-white rounded-xl font-bold text-xs shadow-sm transition flex items-center space-x-2 w-full sm:w-auto justify-center">
+        <button @click="openAddModal = true; selectedKambingId = '{{ $kambings->first()->id ?? '' }}'; searchAddKambing = ''; openAddKambingDropdown = false;" class="px-4 py-2 bg-primary hover:bg-primary-hover text-white rounded-xl font-bold text-xs shadow-sm transition flex items-center space-x-2 w-full sm:w-auto justify-center">
             <span><i class="fa-solid fa-plus"></i></span>
             <span>Tambah Log Baru</span>
         </button>
@@ -210,6 +239,8 @@
                                             produksi_susu: '{{ $log->produksi_susu }}'
                                         };
                                         editKambingId = '{{ $log->kambing_id }}';
+                                        searchEditKambing = '';
+                                        openEditKambingDropdown = false;
                                         openEditModal = true;
                                     "
                                     class="w-8 h-8 flex items-center justify-center rounded-xl bg-orange-50 hover:bg-orange-100 text-primary hover:text-primary-hover transition"
@@ -252,8 +283,8 @@
         <div class="flex items-center justify-center min-h-screen p-4 text-center">
             <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm" @click="openAddModal = false"></div>
 
-            <div class="relative z-10 w-full max-w-md bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden text-left transition-all transform">
-                <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+            <div class="relative z-10 w-full max-w-md bg-white rounded-3xl shadow-2xl border border-slate-100 text-left transition-all transform">
+                <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50 rounded-t-3xl">
                     <div class="flex items-center space-x-3">
                         <div class="w-8 h-8 rounded-full bg-orange-100 text-primary flex items-center justify-center">
                             <i class="fa-solid fa-plus text-sm"></i>
@@ -269,13 +300,45 @@
                     @csrf
                     <div>
                         <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Pilih Kambing</label>
-                        <select name="kambing_id" x-model="selectedKambingId" required class="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs font-medium outline-none bg-white focus:ring-2 focus:ring-primary/10 focus:border-primary">
-                            @foreach($kambings as $k)
-                            <option value="{{ $k->id }}">
-                                {{ $k->kode_kambing }} ({{ $k->jenis_kelamin }})
-                            </option>
-                            @endforeach
-                        </select>
+                        <div class="relative">
+                            <!-- Hidden input for standard form submission -->
+                            <input type="hidden" name="kambing_id" :value="selectedKambingId" required>
+                            
+                            <!-- Dropdown Button Trigger -->
+                            <button type="button" @click="openAddKambingDropdown = !openAddKambingDropdown" 
+                                class="w-full flex items-center justify-between px-3 py-2 border border-slate-200 rounded-xl text-xs font-medium outline-none bg-white focus:ring-2 focus:ring-primary/10 focus:border-primary">
+                                <span x-text="getSelectedKambingText(selectedKambingId)" class="text-slate-700"></span>
+                                <span class="text-slate-400"><i class="fa-solid fa-chevron-down text-[10px]"></i></span>
+                            </button>
+
+                            <!-- Dropdown Menu -->
+                            <div x-show="openAddKambingDropdown" @click.outside="openAddKambingDropdown = false" 
+                                class="absolute z-50 left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg overflow-hidden" 
+                                x-transition style="display: none;">
+                                <div class="p-2 border-b border-slate-100 bg-slate-50/50">
+                                    <div class="flex items-center bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 focus-within:ring-2 focus-within:ring-primary/10 focus-within:border-primary">
+                                        <span class="text-slate-400 mr-2 text-xs"><i class="fa-solid fa-magnifying-glass"></i></span>
+                                        <input type="text" x-model="searchAddKambing" placeholder="Cari kode kambing..." 
+                                            class="bg-transparent border-none outline-none text-xs text-slate-700 w-full focus:ring-0 p-0">
+                                    </div>
+                                </div>
+                                <ul class="max-h-48 overflow-y-auto py-1">
+                                    <template x-for="k in filteredAddKambings" :key="k.id">
+                                        <li>
+                                            <button type="button" @click="selectedKambingId = k.id; openAddKambingDropdown = false; searchAddKambing = ''" 
+                                                class="w-full text-left px-4 py-2 hover:bg-slate-50 flex items-center justify-between text-xs text-slate-700 transition-colors"
+                                                :class="selectedKambingId == k.id ? 'bg-orange-50/50 text-primary font-semibold' : ''">
+                                                <span x-text="`${k.kode} (${k.jenis})`"></span>
+                                                <span x-show="selectedKambingId == k.id" class="text-primary text-[10px]"><i class="fa-solid fa-check"></i></span>
+                                            </button>
+                                        </li>
+                                    </template>
+                                    <div x-show="filteredAddKambings.length === 0" class="px-4 py-3 text-center text-slate-400 text-xs">
+                                        Kambing tidak ditemukan
+                                    </div>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
@@ -317,8 +380,8 @@
         <div class="flex items-center justify-center min-h-screen p-4 text-center">
             <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm" @click="openEditModal = false"></div>
 
-            <div class="relative z-10 w-full max-w-md bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden text-left transition-all transform">
-                <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+            <div class="relative z-10 w-full max-w-md bg-white rounded-3xl shadow-2xl border border-slate-100 text-left transition-all transform">
+                <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50 rounded-t-3xl">
                     <div class="flex items-center space-x-3">
                         <div class="w-8 h-8 rounded-full bg-orange-100 text-primary flex items-center justify-center">
                             <i class="fa-solid fa-pen-to-square text-sm"></i>
@@ -335,13 +398,45 @@
                     @method('PUT')
                     <div>
                         <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Pilih Kambing</label>
-                        <select name="kambing_id" x-model="editKambingId" required class="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs font-medium outline-none bg-white focus:ring-2 focus:ring-primary/10 focus:border-primary">
-                            @foreach($kambings as $k)
-                            <option value="{{ $k->id }}">
-                                {{ $k->kode_kambing }} ({{ $k->jenis_kelamin }})
-                            </option>
-                            @endforeach
-                        </select>
+                        <div class="relative">
+                            <!-- Hidden input for standard form submission -->
+                            <input type="hidden" name="kambing_id" :value="editKambingId" required>
+                            
+                            <!-- Dropdown Button Trigger -->
+                            <button type="button" @click="openEditKambingDropdown = !openEditKambingDropdown" 
+                                class="w-full flex items-center justify-between px-3 py-2 border border-slate-200 rounded-xl text-xs font-medium outline-none bg-white focus:ring-2 focus:ring-primary/10 focus:border-primary">
+                                <span x-text="getSelectedKambingText(editKambingId)" class="text-slate-700"></span>
+                                <span class="text-slate-400"><i class="fa-solid fa-chevron-down text-[10px]"></i></span>
+                            </button>
+
+                            <!-- Dropdown Menu -->
+                            <div x-show="openEditKambingDropdown" @click.outside="openEditKambingDropdown = false" 
+                                class="absolute z-50 left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg overflow-hidden" 
+                                x-transition style="display: none;">
+                                <div class="p-2 border-b border-slate-100 bg-slate-50/50">
+                                    <div class="flex items-center bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 focus-within:ring-2 focus-within:ring-primary/10 focus-within:border-primary">
+                                        <span class="text-slate-400 mr-2 text-xs"><i class="fa-solid fa-magnifying-glass"></i></span>
+                                        <input type="text" x-model="searchEditKambing" placeholder="Cari kode kambing..." 
+                                            class="bg-transparent border-none outline-none text-xs text-slate-700 w-full focus:ring-0 p-0">
+                                    </div>
+                                </div>
+                                <ul class="max-h-48 overflow-y-auto py-1">
+                                    <template x-for="k in filteredEditKambings" :key="k.id">
+                                        <li>
+                                            <button type="button" @click="editKambingId = k.id; openEditKambingDropdown = false; searchEditKambing = ''" 
+                                                class="w-full text-left px-4 py-2 hover:bg-slate-50 flex items-center justify-between text-xs text-slate-700 transition-colors"
+                                                :class="editKambingId == k.id ? 'bg-orange-50/50 text-primary font-semibold' : ''">
+                                                <span x-text="`${k.kode} (${k.jenis})`"></span>
+                                                <span x-show="editKambingId == k.id" class="text-primary text-[10px]"><i class="fa-solid fa-check"></i></span>
+                                            </button>
+                                        </li>
+                                    </template>
+                                    <div x-show="filteredEditKambings.length === 0" class="px-4 py-3 text-center text-slate-400 text-xs">
+                                        Kambing tidak ditemukan
+                                    </div>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
